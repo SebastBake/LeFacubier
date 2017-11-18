@@ -1,0 +1,31 @@
+<html>
+
+<head>
+    {% if title %}
+    <title>{{ title }}</title>
+    {% else %}
+    <title>LeFacubier</title>
+    {% endif %}
+</head>
+
+<body>
+    <div>
+        <ul>
+            <li>
+                    <a href="/">Home</a>
+            </li>
+            <li>
+                    <a href="/login-or-signup">Login</a>
+            </li>
+        </ul>
+    </div>
+    <hr> {% with messages = get_flashed_messages() %} {% if messages %}
+    <ul>
+        {% for message in messages %}
+        <li>{{ message }} </li>
+        {% endfor %}
+    </ul>
+    {% endif %} {% endwith %} {% block content %}{% endblock %}
+</body>
+
+</html>
