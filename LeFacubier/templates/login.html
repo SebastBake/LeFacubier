@@ -14,7 +14,8 @@
 <h1>Sign Up</h1>
 <form action="\signup" method="post" name="signup">
     {{ signupform.hidden_tag() }}
-    <br /> {{ signupform.email.label }} {{ signupform.email(size=20) }}
+    <br /> {{ signupform.email.label }} {{ signupform.email }}
+    <br /> {{ signupform.username.label }}{{ signupform.username }}
     <br /> {{ signupform.password.label }}{{ signupform.password }}
     <br /> {{ signupform.recaptcha }}
     <br />
