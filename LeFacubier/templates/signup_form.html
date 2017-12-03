@@ -1,0 +1,9 @@
+{% from "_formhelpers.html" import render_field %}
+<form action="/signup" method="post" name="signup">
+    {{ signupform.hidden_tag() }}
+    <br /> {{ render_field(signupform.email) }}
+    <br /> {{ render_field(signupform.username) }}
+    <br /> {{ render_field(signupform.password) }}
+    <br /> {{ signupform.recaptcha }}
+    <input type="submit" value="Sign Up">
+</form>

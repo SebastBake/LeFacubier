@@ -1,0 +1,8 @@
+{% from "_formhelpers.html" import render_field %}
+<form action="/login" method="post" name="login">
+    {{ loginform.hidden_tag() }}
+    <br /> {{ render_field(loginform.email) }}
+    <br /> {{ render_field(loginform.password) }}
+    <br /> {{ loginform.recaptcha }}
+    <input type="submit" value="Log In">
+</form>

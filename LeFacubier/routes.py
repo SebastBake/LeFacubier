@@ -1,85 +1,49 @@
-"""routes
+""" handles URL/request parsing, and routes to the response
 """
-import time
-from flask import render_template, redirect, flash, request, session
-from LeFacubier import APP
-from LeFacubier.forms import LoginForm, SignupForm
-from LeFacubier.models import User, UserSession
+from . import APP
+from .controller import controller
+
 
 @APP.route("/")
 @APP.route("/index.html")
 def index():
     """Index Page
     """
-    try:
-        user = UserSession.get_user_from_session()
-        print(user)
-        renderuser = {
-            'email': user.email,
-            'username': user.username,
-            'password': user.password
-        }
-        return render_template('index.html', user=renderuser)
-    except Exception:
-        renderuser = {
-            'email': 'not logged in',
-            'username': 'none',
-            'password': 'none'
-        }
-    return render_template('index.html', user=renderuser)
+    return controller.home_page()
 
-@APP.route('/login-or-signup', methods=('GET',))
-def login_or_signup():
+
+@APP.route('/register', methods=('GET', ))
+def register():
     """Login Page
     """
-    return render_template(
-        'login.html',
-        loginform=LoginForm(),
-        signupform=SignupForm())
+    return controller.register_page()
 
-@APP.route('/login', methods=('POST',))
+
+@APP.route('/login', methods=('POST', ))
 def login():
-    """Login Page
-    """
-    loginform = LoginForm()
+    """ login user """
+    return controller.login_submission()
 
-    if loginform.validate_on_submit():
 
-        new_user = User.from_request(request)
-        old_user = User.get_by_email(new_user.email)
-
-        if old_user.password != new_user.password:
-            flash("incorrect username or password")
-            return redirect('/login-or-signup')
-        else:
-            print(UserSession.new(old_user.id))
-            flash("Logged in")
-            return redirect('/')
-    else:
-        flash("Please correctly fill login form")
-        return redirect('/login-or-signup')
-
-@APP.route('/signup', methods=('POST',))
+@APP.route('/signup', methods=('POST', ))
 def signup():
-    """ signup """
-    signupform = SignupForm()
+    """ signup user """
+    return controller.signup_submission()
 
-    if signupform.validate_on_submit():
 
-        new_user = User.from_request(request)
-        print("sign up: " + new_user.__repr__())
+@APP.route('/logout', methods=('GET', ))
+def logout():
+    """ logout user """
+    return controller.logout_submission()
 
-        if User.get_by_username(new_user.username):
-            flash("Username already taken")
-            return redirect('/login-or-signup')
-        elif User.get_by_email(new_user.email):
-            flash("Email already taken")
-            return redirect('/login-or-signup')
-        else:
-            new_user = User.submit(new_user)
-            flash("Signed up as " + new_user.username)
-            UserSession.new(new_user.id)
-            return redirect('/')
-    else:
-        flash("Please correctly fill signup form")
-        return redirect('/login-or-signup')
+
+@APP.route('/dash', methods=('GET', ))
+def dash():
+    """user dashboard"""
+    return controller.in_progress_page("Dash")
+
+
+@APP.route('/settings', methods=('GET', ))
+def settings():
+    """user settings"""
+    return controller.in_progress_page("Settings")
